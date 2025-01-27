@@ -24,4 +24,10 @@ export interface IPromptInput {
     onChange: (value: string) => void;
     onSubmit: () => void;
     isLoading?: boolean;
+}
+
+export interface ICommentSectionProps {
+    postId: string;
+    comments: IComment[];
+    onAddComment: (content: string) => void;
 } 

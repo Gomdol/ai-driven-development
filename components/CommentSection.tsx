@@ -2,17 +2,11 @@ import { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { IComment } from "@/types"
+import { IComment, ICommentSectionProps } from "@/types"
 import { formatDistanceToNow } from "date-fns"
 import { ko } from "date-fns/locale"
 
-interface CommentSectionProps {
-    postId: string;
-    comments: IComment[];
-    onAddComment: (content: string) => void;
-}
-
-export default function CommentSection({ postId, comments, onAddComment }: CommentSectionProps) {
+export default function CommentSection({ postId, comments, onAddComment }: ICommentSectionProps) {
     const [newComment, setNewComment] = useState("")
 
     const handleSubmit = (e: React.FormEvent) => {
