@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronLeft, Heart, MessageCircle, Bookmark, Share2 } from "lucide-react"
@@ -8,53 +8,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import CommentSection from "@/components/CommentSection"
-import { IPost, IComment } from "@/types"
-
-// 목업 데이터
-const MOCK_POST: IPost = {
-    postId: "1",
-    imageURL: "https://picsum.photos/800/800",
-    userName: "창작자1",
-    userProfile: "https://api.dicebear.com/7.x/avataaars/svg?seed=1",
-    createdAt: "2024-03-20",
-    likes: 120,
-    comments: 15,
-    scraps: 30,
-    isLiked: false
-}
-
-const MOCK_COMMENTS: IComment[] = [
-    {
-        id: "1",
-        postId: "1",
-        content: "정말 멋진 작품이네요!",
-        userName: "댓글러1",
-        userProfile: "https://api.dicebear.com/7.x/avataaars/svg?seed=comment1",
-        createdAt: "2024-03-20T10:00:00Z"
-    },
-    {
-        id: "2",
-        postId: "1",
-        content: "어떤 프롬프트를 사용하셨나요?",
-        userName: "댓글러2",
-        userProfile: "https://api.dicebear.com/7.x/avataaars/svg?seed=comment2",
-        createdAt: "2024-03-20T11:30:00Z"
-    },
-    {
-        id: "3",
-        postId: "1",
-        content: "색감이 너무 예쁘네요 👍",
-        userName: "댓글러3",
-        userProfile: "https://api.dicebear.com/7.x/avataaars/svg?seed=comment3",
-        createdAt: "2024-03-20T12:15:00Z"
-    }
-]
+import { MOCK_POSTS, MOCK_COMMENTS } from "@/utils/mockData"
+import { IPost } from "@/types"
 
 export default function PostDetail({ params }: { params: { id: string } }) {
-    const [post, setPost] = useState<IPost>(MOCK_POST)
-    const [comments, setComments] = useState<IComment[]>(MOCK_COMMENTS)
-    const [isLiked, setIsLiked] = useState(post.isLiked)
-    const [likesCount, setLikesCount] = useState(post.likes)
+    const [post, setPost] = useState<IPost | null>(null)
+    const [comments, setComments] = useState(MOCK_COMMENTS)
+    const [isLiked, setIsLiked] = useState(false)
+    const [likesCount, setLikesCount] = useState(0)
+
+    useEffect(() => {
+        const foundPost = MOCK_POSTS.find(p => p.postId === params.id) || MOCK_POSTS[0]
+        setPost(foundPost)
+        setIsLiked(foundPost.isLiked || false)
+        setLikesCount(foundPost.likes)
+    }, [params.id])
+
+    if (!post) return null
 
     const handleLikeClick = () => {
         setIsLiked(!isLiked)
@@ -62,7 +32,7 @@ export default function PostDetail({ params }: { params: { id: string } }) {
     }
 
     const handleAddComment = (content: string) => {
-        const newComment: IComment = {
+        const newComment = {
             id: `comment-${Date.now()}`,
             postId: post.postId,
             content,

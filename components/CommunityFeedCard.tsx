@@ -24,6 +24,7 @@ const MOCK_COMMENTS: IComment[] = [
 ]
 
 export default function CommunityFeedCard({ post }: { post: IPost }) {
+    console.log('Rendering card:', post) // 디버깅용 로그
     const [isLiked, setIsLiked] = useState(post.isLiked || false)
     const [likesCount, setLikesCount] = useState(post.likes)
     const [isCommentOpen, setIsCommentOpen] = useState(false)
