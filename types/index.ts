@@ -46,10 +46,8 @@ export interface IShareModalProps {
 }
 
 export interface IStyleOptions {
-    colorScheme: string;
-    textureStrength: number;
-    mood: string;
-    preset: string;
+    artStyle: string;    // 예술 스타일
+    colorTone: string;   // 색조
 }
 
 export interface ICommunityFeedCardProps {
