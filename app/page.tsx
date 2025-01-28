@@ -1,5 +1,5 @@
-import ImageGenerationSection from "@/components/ImageGenerationSection"
-import CommunityFeedSection from "@/components/CommunityFeedSection"
+import ImageGenerationSection from "@/app/home/ImageGenerationSection"
+import CommunityFeedSection from "@/app/home/CommunityFeedSection"
 
 export default function Home() {
     return (

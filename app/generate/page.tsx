@@ -1,40 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Loader2 } from 'lucide-react'
-import GenerateImagePreview from '@/components/generate/ImagePreview'
-import ShareModal from '@/components/generate/ShareModal'
+import { GeneratedImagePreview } from "@/components/GeneratedImagePreview"
+import ShareModal from './ShareModal'
 import { IStyleOptions } from '@/types'
 import { toast } from 'sonner'
-
-// 목업 이미지 URL 배열 - 다양한 스타일의 이미지
-const MOCK_IMAGES = {
-  'Realistic': [
-    'https://picsum.photos/seed/realistic1/800/800',
-    'https://picsum.photos/seed/realistic2/800/800'
-  ],
-  'Anime': [
-    'https://picsum.photos/seed/anime1/800/800',
-    'https://picsum.photos/seed/anime2/800/800'
-  ],
-  'Oil Painting': [
-    'https://picsum.photos/seed/oil1/800/800',
-    'https://picsum.photos/seed/oil2/800/800'
-  ],
-  'Digital Art': [
-    'https://picsum.photos/seed/digital1/800/800',
-    'https://picsum.photos/seed/digital2/800/800'
-  ],
-  'default': [
-    'https://picsum.photos/seed/default1/800/800',
-    'https://picsum.photos/seed/default2/800/800'
-  ]
-}
+import { MOCK_IMAGES } from '@/utils/mocks/images'
 
 export default function GeneratePage() {
+  const searchParams = useSearchParams()
   const [prompt, setPrompt] = useState('')
   const [styleOptions, setStyleOptions] = useState<IStyleOptions>({
     artStyle: 'Realistic',
@@ -43,6 +22,14 @@ export default function GeneratePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+
+  // URL에서 프롬프트 파라미터 가져오기
+  useEffect(() => {
+    const urlPrompt = searchParams.get('prompt')
+    if (urlPrompt) {
+      setPrompt(decodeURIComponent(urlPrompt))
+    }
+  }, [searchParams])
 
   // 이미지 생성 함수
   const handleGenerate = async () => {
@@ -162,7 +149,7 @@ export default function GeneratePage() {
 
         {/* 이미지 프리뷰 및 관리 섹션 */}
         {generatedImage && (
-          <GenerateImagePreview
+          <GeneratedImagePreview
             imageUrl={generatedImage}
             onShare={() => setIsShareModalOpen(true)}
           />
