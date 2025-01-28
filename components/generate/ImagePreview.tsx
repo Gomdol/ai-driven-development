@@ -1,13 +1,9 @@
 import { Button } from '@/components/ui/button'
 import { Download, Share2, Save } from 'lucide-react'
 import Image from 'next/image'
+import { IGenerateImagePreviewProps } from '@/types'
 
-interface IGenerateImagePreviewProps {
-  imageUrl: string
-  onShare: () => void
-}
-
-export default function GenerateImagePreview({ imageUrl, onShare }: IGenerateImagePreviewProps) {
+export default function ImagePreview({ imageUrl, onShare }: IGenerateImagePreviewProps) {
   const handleDownload = async () => {
     const response = await fetch(imageUrl)
     const blob = await response.blob()

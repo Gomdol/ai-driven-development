@@ -4,14 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useState } from 'react'
-
-interface IShareModalProps {
-  isOpen: boolean
-  onClose: () => void
-  imageUrl: string | null
-  prompt: string
-  styleOptions: object
-}
+import { IShareModalProps } from '@/types'
 
 export default function ShareModal({ isOpen, onClose, imageUrl, prompt, styleOptions }: IShareModalProps) {
   const [title, setTitle] = useState('')
