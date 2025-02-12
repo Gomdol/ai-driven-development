@@ -2,13 +2,9 @@ import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { mockGalleryImages } from '@/utils/mocks/gallery'
+import { IImageDetailModalProps } from '@/types'
 
-interface ImageDetailModalProps {
-  imageId: string
-  onClose: () => void
-}
-
-export function ImageDetailModal({ imageId, onClose }: ImageDetailModalProps) {
+export function ImageDetailModal({ imageId, onClose }: IImageDetailModalProps) {
   const image = mockGalleryImages.find(img => img.id === imageId)
   
   if (!image) return null

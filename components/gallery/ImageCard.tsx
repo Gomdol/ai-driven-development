@@ -7,25 +7,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem
 } from '@/components/ui/dropdown-menu'
+import { IImageCardProps } from '@/types'
 
-interface ImageCardProps {
-  image: {
-    id: string
-    url: string
-    thumbnail: string
-    createdAt: string
-    visibility: 'public' | 'private'
-    stats: {
-      likes: number
-      views: number
-    }
-  }
-  selected: boolean
-  onSelect: () => void
-  onClick: () => void
-}
-
-export function ImageCard({ image, selected, onSelect, onClick }: ImageCardProps) {
+export function ImageCard({ image, selected, onSelect, onClick }: IImageCardProps) {
   return (
     <Card className="relative group">
       {/* 체크박스 */}

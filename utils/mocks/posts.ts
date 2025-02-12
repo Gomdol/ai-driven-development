@@ -9,7 +9,17 @@ export const MOCK_POSTS: IPost[] = [
     createdAt: '2024-03-20',
     likes: 156,
     comments: 23,
-    scraps: 45
+    scraps: 45,
+    commentList: [
+      {
+        id: '1',
+        content: '멋진 이미지네요!',
+        userName: '댓글작성자1',
+        userProfile: '/avatars/commenter1.jpg',
+        createdAt: new Date().toISOString()
+      },
+      // ... 더 많은 댓글
+    ]
   },
   {
     postId: '2',

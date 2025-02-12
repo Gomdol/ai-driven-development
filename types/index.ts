@@ -8,6 +8,7 @@ export interface IPost {
     comments: number;
     scraps: number;
     isLiked?: boolean;
+    commentList?: IComment[];
 }
 
 export interface IComment {
@@ -56,4 +57,40 @@ export interface ICommunityFeedCardProps {
 
 export interface IImageGenerationSectionProps {
     onImageGenerated?: (imageUrl: string) => void;
+}
+
+export interface ICommentModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    postId: string;
+    initialComments: IComment[];
+}
+
+export interface IBatchActionBarProps {
+    selectedCount: number;
+    onDelete: () => void;
+    onVisibilityChange: () => void;
+    onTagsChange: () => void;
+}
+
+export interface IImageCardProps {
+    image: {
+        id: string;
+        url: string;
+        thumbnail: string;
+        createdAt: string;
+        visibility: 'public' | 'private';
+        stats: {
+            likes: number;
+            views: number;
+        };
+    };
+    selected: boolean;
+    onSelect: () => void;
+    onClick: () => void;
+}
+
+export interface IImageDetailModalProps {
+    imageId: string;
+    onClose: () => void;
 } 
