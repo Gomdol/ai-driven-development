@@ -6,185 +6,107 @@
 
 #### 1. 화면 레이아웃 및 디자인 명세
 
-- **파일 위치**: `app/page.tsx`
-
-1. **프롬프트 입력 섹션**
-   - **UI 구성**: 화면 상단 중앙에 배치된 텍스트 입력 필드로, ShadCN의 `Input` 컴포넌트를 사용해 간결한 회색 배경으로 설정합니다.
-   - **상호작용**: 사용자가 프롬프트 입력 필드에 텍스트를 입력합니다.
-   - **오류 처리**: 프롬프트 필드가 비어 있을 경우 이미지 생성 버튼 클릭 시 "프롬프트를 3자 이상 입력해주세요"라는 오류 메시지를 표시합니다.
-   - **추가 사항**: 사용자가 프롬프트를 입력하지 않으면 이미지 생성 버튼이 비활성화됩니다.
-
-2. **이미지 생성 버튼**
-   - **UI 구성**: 프롬프트 입력 필드 하단에 배치되며, ShadCN의 `Button` 컴포넌트를 사용해 직사각형 버튼으로 표시됩니다.
-   - **상호작용**: 프롬프트 입력 후 사용자가 버튼을 클릭하면 이미지 생성 화면으로 이동합니다.
-   - **오류 처리**: 프롬프트 입력이 없는 상태에서 버튼 클릭 시 오류 메시지를 표시하며, 버튼이 비활성화됩니다.
-
-3. **커뮤니티 피드 섹션**
-   - **UI 구성**: 메인 화면 하단에 카드형 그리드 레이아웃으로 표시되며, `components/CommunityFeedCard.tsx`에 작성된 ShadCN 카드 컴포넌트를 사용합니다.
-   - **상호작용**: 각 카드에는 썸네일 이미지, 사용자명, 좋아요, 댓글 수 등이 표시되며, 클릭 시 게시물 상세 페이지(`/post/[postId]`)로 이동합니다.
-   - **카드 호버 효과**: 마우스 호버 시 자연스러운 그림자와 스케일 효과를 적용하여 클릭 가능함을 시각적으로 표현합니다.
-
-4. **피드 상세 화면**
-   - **파일 위치**: `app/post/[postId]/page.tsx`
-   - **UI 구성**:
-     - 상단: 생성된 이미지를 큰 크기로 표시
-     - 작성자 정보: 프로필 이미지, 사용자명, 작성 시간
-     - 상호작용 버튼: 좋아요, 댓글, 스크랩 버튼과 카운트
-     - 프롬프트 정보: 이미지 생성에 사용된 프롬프트와 스타일 옵션
-     - 댓글 섹션: 댓글 목록과 댓글 작성 입력 필드
+1. **이미지 생성 섹션** (구현 완료)
+   - **파일 위치**: `app/home/ImageGenerationSection.tsx`
+   - **UI 구성**: 
+     - 중앙 정렬된 제목 "AI로 당신만의 이미지를 만들어보세요"
+     - PromptInput 컴포넌트를 사용한 프롬프트 입력 필드
    - **상호작용**:
-     - 좋아요/스크랩 버튼 클릭 시 즉시 상태 반영
-     - 댓글 작성/수정/삭제 기능
-     - 답글 작성 기능
+     - 프롬프트 입력 후 Enter 또는 버튼 클릭 시 `/generate` 페이지로 이동
+     - 3자 미만 입력 시 Sonner 토스트로 에러 메시지 표시
+     - 입력 중 로딩 상태 표시
 
-#### 2. 사용자 흐름 및 상호작용
+2. **커뮤니티 피드 섹션** (구현 완료)
+   - **파일 위치**: `app/home/CommunityFeedSection.tsx`
+   - **UI 구성**:
+     - 반응형 그리드 레이아웃 (1~4컬럼)
+     - CommunityFeedCard 컴포넌트로 각 포스트 표시
+   - **카드 기능**:
+     - 이미지 클릭 시 `/post/[postId]` 페이지로 이동
+     - 댓글 버튼 클릭 시 CommentModal 표시
+     - 좋아요/스크랩 상태 로컬 관리
 
-1. **프롬프트 입력 → 이미지 생성 버튼 클릭 → 이미지 생성 화면 이동**
-   - 사용자가 프롬프트 입력 후 이미지 생성 버튼을 클릭하면 AI 이미지 생성 API 요청을 전송하고, 이후 이미지 생성 화면으로 이동합니다.
-   
-2. **커뮤니티 피드 카드 클릭 → 게시물 상세 페이지 이동**
-   - 커뮤니티 피드의 각 카드를 클릭하면 `/post/[postId]` 경로로 이동합니다.
-   - 상세 페이지에서는 다음과 같은 상호작용이 가능합니다:
+#### 2. 데이터 관리 (현재 목업 데이터 사용)
+
+1. **포스트 데이터**
+   - **파일 위치**: `utils/mocks/posts.ts`
+   - **구조**:
+     ```typescript
+     interface IPost {
+       postId: string;
+       imageURL: string;
+       userName: string;
+       userProfile: string;
+       createdAt: string;
+       likes: number;
+       comments: number;
+       scraps: number;
+       isLiked?: boolean;
+       commentList?: IComment[];
+     }
+     ```
+
+2. **상태 관리**
+   - 좋아요/스크랩: useState로 로컬 상태 관리
+   - 댓글: CommentModal 내부에서 로컬 상태로 관리
+   - 향후 서버 상태 관리로 마이그레이션 예정
+
+#### 3. 컴포넌트 구조
+
+```
+Home (page.tsx)
+├── ImageGenerationSection
+│   └── PromptInput (ShadCN Input + Button)
+└── CommunityFeedSection
+    ├── CommunityFeedCard
+    └── CommentModal (ShadCN Dialog)
+        └── CommentSection
+```
+
+### 백엔드 기능명세서 (구현 예정)
+
+#### 1. API 엔드포인트
+
+1. **피드 조회 API**
+   - **경로**: `app/api/feed/route.ts`
+   - **메서드**: GET
+   - **응답 데이터**:
+     ```typescript
+     {
+       posts: IPost[];
+       nextCursor?: string;
+       hasMore: boolean;
+     }
+     ```
+
+2. **상호작용 API**
+   - **경로**: `app/api/posts/[postId]/route.ts`
+   - **메서드**: POST, PUT
+   - **기능**:
      - 좋아요/스크랩 토글
-     - 댓글 작성 및 관리
-     - 프롬프트 정보 확인
-     - 작성자 프로필 확인
+     - 댓글 CRUD
+     - 조회수 증가
 
-#### 3. API 연동
+#### 2. 데이터베이스 스키마 (Drizzle)
 
-1. **프롬프트를 통한 이미지 생성 API**
-   - **현재 구현**: 이미지 생성 화면으로 프롬프트 전달
-   - **경로**: `app/api/generate-image/route.ts`
-   - **메서드**: `POST`
-   - **요청 데이터**: `{ prompt: string }`
-   - **응답 데이터**: `{ success: boolean, imageURL: string }`
+```typescript
+// posts 테이블
+export const posts = pgTable('posts', {
+  id: serial('id').primaryKey(),
+  imageUrl: text('image_url').notNull(),
+  userId: integer('user_id').references(() => users.id),
+  createdAt: timestamp('created_at').defaultNow(),
+  likes: integer('likes').default(0),
+  comments: integer('comments').default(0),
+  scraps: integer('scraps').default(0),
+});
 
-2. **커뮤니티 피드 API**
-   - **경로**: `app/api/community/feed/route.ts`
-   - **메서드**: `GET`
-   - **요청 데이터**: 없음
-   - **응답 데이터**: `{ posts: [{ postId: string, imageURL: string, userName: string, likes: number, comments: number }] }`
-   - **연동 방식**: 메인 화면 로드 시 커뮤니티 피드 데이터를 불러와 카드 컴포넌트에 전달하여 사용자 게시물을 렌더링합니다.
-
-3. **게시물 상세 정보 API**
-   - **경로**: `app/api/post/[postId]/route.ts`
-   - **메서드**: `GET`
-   - **요청 데이터**: URL 파라미터로 postId 전달
-   - **응답 데이터**:      ```typescript
-     {
-       post: {
-         postId: string;
-         imageURL: string;
-         userName: string;
-         userProfile: string;
-         createdAt: string;
-         prompt: string;
-         styleOptions: object;
-         likes: number;
-         comments: number;
-         scraps: number;
-         isLiked: boolean;
-         isScrapped: boolean;
-       }
-     }     ```
-
-4. **댓글 관련 API**
-   - **경로**: `app/api/post/[postId]/comments/route.ts`
-   - **메서드**: 
-     - `GET`: 댓글 목록 조회
-     - `POST`: 새 댓글 작성
-     - `PUT`: 댓글 수정
-     - `DELETE`: 댓글 삭제
-   - **응답 데이터**:      ```typescript
-     {
-       comments: [{
-         id: string;
-         content: string;
-         userName: string;
-         userProfile: string;
-         createdAt: string;
-         parentId?: string;
-       }]
-     }     ```
-
-#### 4. 테스트 항목
-
-1. **프롬프트 입력 필드**
-   - 3자 미만 입력 시 버튼 비활성화 확인
-   - Enter 키 입력 시 이미지 생성 화면 이동 확인
-   - 프롬프트 값이 이미지 생성 화면으로 정상 전달되는지 확인
-
-2. **이미지 생성 버튼**
-   - 3자 이상 입력 시 버튼 활성화 확인
-   - 클릭 시 이미지 생성 화면으로 정상 이동 확인
-   - 이동 시 프롬프트 및 상태 유지 확인
-
-3. **커뮤니티 피드**
-   - 커뮤니티 피드가 정상적으로 로드되고 각 카드가 클릭 가능하며, 클릭 시 상세 페이지로 이동하는지 확인합니다.
-   - 피드 데이터(사용자명, 좋아요 수, 댓글 수)가 올바르게 표시되는지 확인합니다.
-
-4. **피드 상세 화면**
-   - 게시물 정보가 정확하게 로드되는지 확인
-   - 좋아요/스크랩 기능이 정상 작동하는지 확인
-   - 댓글 작성/수정/삭제가 정상적으로 동작하는지 확인
-   - 답글 작성 기능이 정상 작동하는지 확인
-   - 이미지가 고해상도로 정상 표시되는지 확인
-
----
-
-### 백엔드 기능명세서
-
-#### 1. 프롬프트를 통한 이미지 생성 API
-
-- **파일 위치**: `app/api/generate-image/route.ts`
-- **HTTP 메서드**: `POST`
-- **요청 데이터**: `{ prompt: string }`
-- **응답 데이터**: `{ success: boolean, imageURL: string }`
-- **처리 로직**: 요청받은 프롬프트 데이터를 기반으로 AI 이미지 생성 로직을 호출하고, 생성된 이미지의 URL을 반환합니다.
-
-#### 2. 커뮤니티 피드 API
-
-- **파일 위치**: `app/api/community/feed/route.ts`
-- **HTTP 메서드**: `GET`
-- **요청 데이터**: 없음
-- **응답 데이터**: `{ posts: [{ postId: string, imageURL: string, userName: string, likes: number, comments: number }] }`
-- **처리 로직**: 데이터베이스에서 최신 커뮤니티 게시물을 조회하여 각 게시물의 이미지, 사용자명, 좋아요 수, 댓글 수 등을 반환합니다.
-
-#### 3. 게시물 상세 정보 API
-
-- **파일 위치**: `app/api/post/[postId]/route.ts`
-- **HTTP 메서드**: `GET`
-- **처리 로직**: 
-  - postId를 기반으로 게시물 상세 정보 조회
-  - 현재 사용자의 좋아요/스크랩 상태 확인
-  - 조회수 증가 처리
-
-#### 4. 댓글 관리 API
-
-- **파일 위치**: `app/api/post/[postId]/comments/route.ts`
-- **HTTP 메서드**: `GET`, `POST`, `PUT`, `DELETE`
-- **처리 로직**:
-  - 댓글 목록 조회 및 페이지네이션 처리
-  - 새 댓글 작성 및 유효성 검사
-  - 댓글 수정/삭제 권한 확인
-  - 답글 작성 및 계층 구조 관리
-
-#### 5. 테스트 항목
-
-1. **프롬프트를 통한 이미지 생성 API**
-   - 유효한 프롬프트가 제공된 경우 이미지가 생성되고 URL이 반환되는지 확인합니다.
-   - 잘못된 입력 시 오류 메시지가 반환되는지 확인합니다.
-
-2. **커뮤니티 피드 API**
-   - API 요청 시 커뮤니티 피드 데이터가 올바르게 반환되는지 확인합니다.
-   - 데이터베이스에 존재하는 게시물 수에 맞는 응답 개수가 반환되는지 확인합니다.
-
-3. **게시물 상세 정보 API**
-   - 올바른 postId로 요청 시 정상적인 데이터 반환 확인
-   - 잘못된 postId로 요청 시 적절한 에러 처리 확인
-   - 좋아요/스크랩 상태가 정확하게 반영되는지 확인
-
-4. **댓글 관리 API**
-   - 댓글 작성/수정/삭제 권한 검증 확인
-   - 답글 계층 구조가 올바르게 유지되는지 확인
-   - 페이지네이션이 정상 작동하는지 확인
+// comments 테이블
+export const comments = pgTable('comments', {
+  id: serial('id').primaryKey(),
+  postId: integer('post_id').references(() => posts.id),
+  userId: integer('user_id').references(() => users.id),
+  content: text('content').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+```
