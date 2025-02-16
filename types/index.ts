@@ -75,7 +75,7 @@ export interface IBatchActionBarProps {
 
 export interface IImageCardProps {
     image: {
-        id: string;
+        postId: string;
         url: string;
         thumbnail: string;
         createdAt: string;
@@ -91,6 +91,6 @@ export interface IImageCardProps {
 }
 
 export interface IImageDetailModalProps {
-    imageId: string;
+    postId: string;
     onClose: () => void;
 } 

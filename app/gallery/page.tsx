@@ -19,7 +19,7 @@ import { CalendarIcon } from "lucide-react"
 export default function GalleryPage() {
   const [selectedImages, setSelectedImages] = useState<string[]>([])
   const [showDetailModal, setShowDetailModal] = useState(false)
-  const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null)
   
   const handleImageSelect = (imageId: string) => {
     setSelectedImages(prev => 
@@ -30,7 +30,7 @@ export default function GalleryPage() {
   }
 
   const handleImageClick = (imageId: string) => {
-    setSelectedImageId(imageId)
+    setSelectedPostId(imageId)
     setShowDetailModal(true)
   }
 
@@ -97,9 +97,9 @@ export default function GalleryPage() {
       </div>
 
       {/* 이미지 상세 모달 */}
-      {showDetailModal && selectedImageId && (
+      {showDetailModal && selectedPostId && (
         <ImageDetailModal
-          imageId={selectedImageId}
+          postId={selectedPostId}
           onClose={() => setShowDetailModal(false)}
         />
       )}

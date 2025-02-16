@@ -4,8 +4,13 @@ import { Input } from '@/components/ui/input'
 import { mockGalleryImages } from '@/utils/mocks/gallery'
 import { IImageDetailModalProps } from '@/types'
 
-export function ImageDetailModal({ imageId, onClose }: IImageDetailModalProps) {
-  const image = mockGalleryImages.find(img => img.id === imageId)
+export interface IImageDetailModalProps {
+  postId: string;
+  onClose: () => void;
+}
+
+export function ImageDetailModal({ postId, onClose }: IImageDetailModalProps) {
+  const image = mockGalleryImages.find(img => img.id === postId)
   
   if (!image) return null
 

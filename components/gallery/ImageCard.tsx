@@ -10,6 +10,10 @@ import {
 import { IImageCardProps } from '@/types'
 
 export function ImageCard({ image, selected, onSelect, onClick }: IImageCardProps) {
+  const handleClick = () => {
+    onClick();
+  };
+
   return (
     <Card className="relative group">
       {/* 체크박스 */}
@@ -38,7 +42,7 @@ export function ImageCard({ image, selected, onSelect, onClick }: IImageCardProp
       {/* 이미지 */}
       <div 
         className="aspect-square cursor-pointer"
-        onClick={onClick}
+        onClick={handleClick}
       >
         <img
           src={image.thumbnail}
